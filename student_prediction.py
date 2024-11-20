@@ -89,21 +89,22 @@ def submit():
         if not nama:
             raise Exception("Nama siswa tidak boleh kosong.")
 
-        prediksi = calculate_prediction(biologi, fisika, inggris)
-        save_to_database(nama, biologi, fisika, inggris, prediksi)
+        prediksi = calculate_prediction(biologi, fisika, inggris) #membuat objek baru prediksi dan memanggil fungsi calculate prediction
+        save_to_database(nama, biologi, fisika, inggris, prediksi) #memanggil fungsi untuk menyimpan data ke dalam database
 
-        messagebox.showinfo("Sukses", f"Data berhasil disimpan!\nPrediksi Fakultas: {prediksi}")
-        clear_inputs()
-        populate_table()
+        messagebox.showinfo("Sukses", f"Data berhasil disimpan!\nPrediksi Fakultas: {prediksi}") #menampilkan message box untuk menginformasikan bahwa data telah disimpan atau tidak valid
+        clear_inputs() #memanggil fungsi untuk mengosongkan inputan
+        populate_table() #memanggil fungsi untuk menampilkan tabel hasil
     except ValueError as e:
         messagebox.showerror("Error", f"Input tidak valid: {e}")
 
 #tombol button untuk update data
 def update():
     try:
-        if not selected_record_id.get():
+        if not selected_record_id.get(): #jika tidak ada syarat kondisi dimana id tidak boleh kosong
             raise Exception("Pilih data dari tabel untuk di-update!")
 
+        #memanggil seluruh data dari database
         record_id = int(selected_record_id.get())
         nama = nama_var.get()
         biologi = int(biologi_var.get())
@@ -113,12 +114,12 @@ def update():
         if not nama:
             raise ValueError("Nama siswa tidak boleh kosong.")
 
-        prediksi = calculate_prediction(biologi, fisika, inggris)
-        update_database(record_id, nama, biologi, fisika, inggris, prediksi)
+        prediksi = calculate_prediction(biologi, fisika, inggris) #membuat objek baru prediksi dan memanggil fungsi calculate prediction
+        update_database(record_id, nama, biologi, fisika, inggris, prediksi) #memanggil fungsi untuk mengupdate data ke dalam database
 
-        messagebox.showinfo("Sukses", "Data berhasil diperbarui!")
-        clear_inputs()
-        populate_table()
+        messagebox.showinfo("Sukses", "Data berhasil diperbarui!") #menampilkan message box untuk menginformasikan bahwa data telah diperbarui
+        clear_inputs() #memanggil fungsi untuk mengosongkan inputan
+        populate_table() #memanggil fungsi untuk menampilkan tabel hasil
     except ValueError as e:
         messagebox.showerror("Error", f"Kesalahan: {e}")
 
@@ -127,11 +128,11 @@ def delete():
     try:
         if not selected_record_id.get():
             raise Exception("Pilih data dari tabel untuk dihapus!")
-            record_id = int(selected_record_id.get())
-        delete_database(record_id)
-        messagebox.showinfo("Sukses", "Data berhasil dihapus!")
-        clear_inputs()
-        populate_table()
+            record_id = int(selected_record_id.get()) #memanggil id yang ingin dihapus data dari database
+        delete_database(record_id) #memanggil fungsi hapus data dari id yang dipilih
+        messagebox.showinfo("Sukses", "Data berhasil dihapus!") #menampilkan message box untuk menginformasikan bahwa data telah dihapus
+        clear_inputs() #memanggil fungsi untuk mengosongkan inputan
+        populate_table() #memanggil fungsi untuk menampilkan tabel hasil
     except ValueError as e:
         messagebox.showerror("Error", f"Kesalahan: {e}")
 
@@ -143,7 +144,7 @@ def clear_inputs():
     inggris_var.set("")
     selected_record_id.set("")
 
-#
+#fungsi untuk menampilkan data berdasarkan tabel
 def populate_table():
     for row in tree.get_children():
         tree.delete(row)
@@ -174,10 +175,10 @@ root = Tk()
 root.title("Prediksi Fakultas Siswa")
 
 # Variabel tkinter
-nama_var = StringVar()
-biologi_var = StringVar()
-fisika_var = StringVar()
-inggris_var = StringVar()
+nama_var = StringVar() #untuk menyimpan data nama
+biologi_var = StringVar() # Untuk menyimpan nilai biologi record yang dipilih
+fisika_var = StringVar() # Untuk menyimpan nilai fisika record yang dipilih
+inggris_var = StringVar() # Untuk menyimpan nilai bahasa inggris record yang dipilih
 selected_record_id = StringVar()  # Untuk menyimpan ID record yang dipilih
 
 Label(root, text="Nama Siswa").grid(row=0, column=0, padx=10, pady=5)
@@ -207,8 +208,7 @@ for col in columns:
 
 tree.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
 
-tree.bind('<ButtonRelease-1>', fill_inputs_from_table)
-
+tree.bind('<ButtonRelease-1>', fill_inputs_from_table) # Untuk mengisi inputan dengan data yang dipilih dari tabel yang ada dalam database ketiika setelah mengklik event
 populate_table()
 
-root.mainloop()
+root.mainloop() # Untuk menjalankan aplikasi GUI
